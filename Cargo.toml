@@ -1,0 +1,16 @@
+[package]
+authors = ["Maximilian Krüger <kruemaxi@gmail.com>"]
+description = "useful functions for working with times, rates, frequencies, etc"
+documentation = "https://snd.github.io/hertz/hertz/index.html"
+homepage = "https://github.com/snd/hertz"
+keywords = ["sample rate", "frequency", "hertz", "frame rate"]
+license = "MIT OR Apache-2.0"
+name = "hertz"
+readme = "README.md"
+repository = "https://github.com/snd/hertz.git"
+version = "0.1.0"
+
+[dependencies]
+nalgebra = "0.5.1"
+num = "0.1.30"
+time = "0.1.34"
