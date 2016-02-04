@@ -52,6 +52,8 @@ pub fn sleep_for_constant_rate(fps: usize, ns_before: u64) {
 /// time fourier transform of a signal with `sample_rate` with
 /// a sliding window of `window_sizew`.
 /// equivalent to `rayleigh(sample_rate, window_size)..nyquist(sample_rate)`
+/// increase the window size to increase the lower frequency
+/// increase the sample rate to increase the upper frequency
 fn hertz_range<T>(sample_rate: T, window_size: T) -> Range<T>
     where T: Div<T, Output=T> + From<u16> + Clone
 {
@@ -60,6 +62,12 @@ fn hertz_range<T>(sample_rate: T, window_size: T) -> Range<T>
 
 #[test]
 fn test_hertz_range() {
+    assert_eq!(
+        hertz_range(44100., 1024. * 8.),
+        (5.38330078125)..22050.);
+    assert_eq!(
+        hertz_range(44100., 1024. * 4.),
+        (10.7666015625)..22050.);
     assert_eq!(
         hertz_range(44100., 1024.),
         (43.06640625)..22050.);
@@ -98,4 +106,11 @@ fn seconds_per_window<T>(samples_per_second: T, samples_per_window: T) -> T
     where T: Div<T, Output=T>
 {
     samples_per_window / samples_per_second
+}
+
+#[test]
+fn test_seconds_per_window() {
+    // 11ms time resolution
+    assert_eq!(seconds_per_window(44100., 512.), 0.011609977324263039);
+    assert_eq!(seconds_per_window(44100., 1024.), 0.023219954648526078);
 }
