@@ -8,20 +8,11 @@
 **useful functions for working with frame-rates, sample-rates,
 other rates,
 time durations,
-frequencies, etc.
+frequencies, etc and for keeping constant fps.
 written in [rust](https://www.rust-lang.org/).**
 
 to use add `hertz = "*"`
 to the `[dependencies]` section of your `Cargo.toml` and call `extern crate hertz;` in your code.
-
-frequency 
-
-"rate", "sample rate", "frame rate", "fps", "frequency",  express the same
-concept, are therefore used interchangeably
-simply called "rate"
-and are always expressed in hertz i.e. per second.
-
-duration means 
 
 ## [read the documentation for an example and more !](https://snd.github.io/hertz/hertz/index.html)
 
