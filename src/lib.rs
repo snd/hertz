@@ -6,11 +6,12 @@ time durations,
 frequencies, etc and for keeping constant fps.**
 
 `rate`, `sample rate`, `frame rate`, `fps`, `frequency`, etc
-express the same concept, are therefore used interchangeably.
+express the same concept and are therefore used interchangeably.
 
 you can use hertz to compute the time resolution
-and frequency range of a signal that can be meaningfully analyzed by a
-[short-time fourier transform](https://en.wikipedia.org/wiki/Short-time_Fourier_transform#Explanation):
+and frequency range of that can be meaningfully analyzed by a
+[short-time fourier transform](https://en.wikipedia.org/wiki/Short-time_Fourier_transform#Explanation)
+of a signal:
 
 ```
 extern crate hertz;
