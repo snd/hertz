@@ -11,6 +11,4 @@ repository = "https://github.com/snd/hertz.git"
 version = "0.1.0"
 
 [dependencies]
-nalgebra = "0.5.1"
-num = "0.1.30"
 time = "0.1.34"
