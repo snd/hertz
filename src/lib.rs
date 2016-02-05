@@ -3,7 +3,7 @@
 **useful functions for working with frame-rates, sample-rates,
 other rates,
 time durations,
-frequencies, etc and for keeping constant fps.**
+frequencies, etc and for keeping a constant framerate.**
 
 `rate`, `sample rate`, `frame rate`, `fps`, `frequency`, etc
 express the same concept and are therefore used interchangeably.

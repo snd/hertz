@@ -1,6 +1,6 @@
 [package]
 authors = ["Maximilian Krüger <kruemaxi@gmail.com>"]
-description = "useful functions for working with frame-rates, sample-rates other rates, time durations, frequencies, etc and for keeping constant fps"
+description = "useful functions for working with frame-rates, sample-rates other rates, time durations, frequencies, etc and for keeping a constant framerate"
 documentation = "https://snd.github.io/hertz/hertz/index.html"
 homepage = "https://github.com/snd/hertz"
 keywords = ["rayleigh", "nyquist", "hertz", "time", "fps"]

@@ -8,7 +8,7 @@
 **useful functions for working with frame-rates, sample-rates,
 other rates,
 time durations,
-frequencies, etc and for keeping constant fps.
+frequencies, etc and for keeping a constant framerate.
 written in [rust](https://www.rust-lang.org/).**
 
 to use add `hertz = "*"`
