@@ -5,7 +5,11 @@
 [![Build Status](https://travis-ci.org/snd/hertz.svg?branch=master)](https://travis-ci.org/snd/hertz/branches)
 [![](https://meritbadge.herokuapp.com/hertz)](https://crates.io/crates/hertz)
 
-**useful functions for working with times, rates, frequencies, etc. written in [rust](https://www.rust-lang.org/).**
+**useful functions for working with frame-rates, sample-rates,
+other rates,
+time durations,
+frequencies, etc.
+written in [rust](https://www.rust-lang.org/).**
 
 to use add `hertz = "*"`
 to the `[dependencies]` section of your `Cargo.toml` and call `extern crate hertz;` in your code.
