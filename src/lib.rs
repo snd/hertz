@@ -54,7 +54,7 @@ pub fn sleep_for_constant_rate(fps: usize, ns_before: u64) {
 /// equivalent to `rayleigh(sample_rate, window_size)..nyquist(sample_rate)`
 /// increase the window size to increase the lower frequency
 /// increase the sample rate to increase the upper frequency
-fn hertz_range<T>(sample_rate: T, window_size: T) -> Range<T>
+pub fn hertz_range<T>(sample_rate: T, window_size: T) -> Range<T>
     where T: Div<T, Output=T> + From<u16> + Clone
 {
     rayleigh(sample_rate.clone(), window_size)..nyquist(sample_rate)
@@ -77,7 +77,7 @@ fn test_hertz_range() {
 }
 
 /// maximum frequency in hertz that can be modeled with a given rate
-fn nyquist<T>(sample_rate: T) -> T
+pub fn nyquist<T>(sample_rate: T) -> T
     where T: Div<T, Output=T> + From<u16>
 {
     sample_rate / T::from(2 as u16)
@@ -89,7 +89,7 @@ fn test_nyquist() {
 }
 
 /// minimum frequency in hertz
-fn rayleigh<T>(sample_rate: T, window_size: T) -> T
+pub fn rayleigh<T>(sample_rate: T, window_size: T) -> T
     where T: Div<T, Output=T> + From<u16>
 {
     T::from(1 as u16) / seconds_per_window(sample_rate, window_size)
