@@ -16,15 +16,15 @@ script:
   - if [ "$TRAVIS_RUST_VERSION" = "nightly" ] ; then
      cargo bench --verbose;
     fi
-# env:
-#   global:
-#     - secure: ""
+env:
+  global:
+    secure: "e+EjBKxRKnL4rG9zNb6LfeRDJJ+zuR09rtaS0ZeGU4AlXqSRplQVJZH1Ecw4cx+AMgHl8/td1XbAifZeT2VShNhnfWC4+VaJPLTQyEYN6Ft9KPpFbBCa1+jrKG2WbtEyp3QjjZaiahG+V5YH3elJzZXY9L+ffGDoLuUsg/HKw4cqLHEMV+RZf8ccyXz4aH6K/MVBGJ8MOq2xFDHrROT4rh04pJduiCOuqgxOY+48hZlrHgCRSoMi/Nn/2uMoxqTqSoCZhJZSiBrcFFtXhdInKwlu5pgYWjgVlJ+DU9LLAwKpYC++Kz6gv0bmrPkY88KtcbQeCi4E9QlAlEeF4Sl5UPJW0H2fNz6GuWf/LQnMmeVZH5lw2MLOrriAzjKvwyv4tjKHzOXWZBI/8ZE1Iqr0YEHhNO649j6m40EZDHbap9Fnbd47mvoLLD6+Fvom6J+GN8LOjFwgHI5yvQXcnScSt7I3qKpyJ7D0FKSBaVjvagEEjO6jlLCnkSOlTEs7ZNxSk5rY9dDy4iUl4UnnbxWgg+Uc2TSext6Km/hfBwvJ8FHMCqz/X3YE+jmXldshPUqtyDT+LQvNwGZiPsuvQL/RS/YUii3CUWdVD3sNpWeeePa+Y545H6vnEpEEkV/CHscspUS5rJCTKZskJyWRJvhCss2bpbbUybDi6ZxV619VlQo="
 # after success build rust documentation and push it to gh-pages branch
 # only do this for the stable branch (once per build)
-# after_success: |
-#   if [ "$TRAVIS_RUST_VERSION" = "stable" ] ; then
-#     cargo doc --no-deps && \
-#     sudo pip install ghp-import && \
-#     ghp-import -n target/doc && \
-#     git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
-#   fi
+after_success: |
+  if [ "$TRAVIS_RUST_VERSION" = "stable" ] ; then
+    cargo doc --no-deps && \
+    sudo pip install ghp-import && \
+    ghp-import -n target/doc && \
+    git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+  fi
