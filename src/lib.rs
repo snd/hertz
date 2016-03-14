@@ -9,7 +9,7 @@ frequencies, etc and for keeping a constant framerate.**
 express the same concept and are therefore used interchangeably.
 
 you can use hertz to compute the time resolution
-and frequency range of that can be meaningfully analyzed by a
+and frequency range that can be meaningfully analyzed by a
 [short-time fourier transform](https://en.wikipedia.org/wiki/Short-time_Fourier_transform#Explanation)
 of a signal:
 
