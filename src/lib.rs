@@ -49,21 +49,20 @@ fn main() {
     let frames_per_second: usize = 60;
 
     loop {
-        let ns_at_frame_start = hertz::current_time_ns();
+        let instant_at_frame_start = std::time::Instant::now();
 
         // here's where logic and rendering would go.
         // this is never called more than frames_per_second
         // times per second.
 
         hertz::sleep_for_constant_rate(
-            frames_per_second, ns_at_frame_start);
+            frames_per_second, instant_at_frame_start);
     }
 }
 ```
 */
 
-extern crate time;
-
+use std::time;
 use std::ops::{Mul, Div, Range};
 
 /// nanoseconds to seconds
@@ -125,25 +124,17 @@ pub fn fps_to_ns_per_frame(fps: usize) -> u64 {
     (s_to_ns(1.0) / (fps as f64)).round() as u64
 }
 
-/// returns the current timestamp in nanoseconds
-#[inline]
-pub fn current_time_ns() -> u64 {
-    time::precise_time_ns()
-}
-
 // /// returns the nanoseconds of sleep which are needed to keep a constant
 // /// frame rate
 // pub fn ns_sleep_needed_for_constant_rate(fps: usize, ns_at_last_frame_start: u64) -> u64 {
 
 /// useful for keeping a constant framerate
-pub fn sleep_for_constant_rate(fps: usize, ns_at_last_frame_start: u64) {
+pub fn sleep_for_constant_rate(fps: usize, instant_at_last_frame_start: time::Instant) {
     let ns_per_frame = fps_to_ns_per_frame(fps);
-    let ns_after: u64 = time::precise_time_ns();
-    let ns_elapsed = ns_after - ns_at_last_frame_start;
-    if ns_elapsed < ns_per_frame {
-        let ns_left_to_sleep = (ns_per_frame - ns_elapsed) as u32;
-        let duration = std::time::Duration::new(0, ns_left_to_sleep);
-        std::thread::sleep(duration);
+    let frame_duration = time::Duration::new(ns_per_frame * 1000000000, (ns_per_frame % 1000000000) as u32);
+    let elapsed = instant_at_last_frame_start.elapsed();
+    if elapsed < frame_duration {
+        std::thread::sleep(frame_duration - elapsed);
     }
 }
 
