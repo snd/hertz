@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `hertz` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, hertz">
+
+    <title>hertz - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'hertz', ty: 'mod', relpath: '../'};</script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>hertz</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-0' class='srclink' href='../src/hertz/src/lib.rs.html#1-217' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p><strong>useful functions for working with frame-rates, sample-rates,
+other rates,
+time durations,
+frequencies, etc and for keeping constant fps.</strong></p>
+
+<p><code>rate</code>, <code>sample rate</code>, <code>frame rate</code>, <code>fps</code>, <code>frequency</code>, etc
+express the same concept, are therefore used interchangeably.</p>
+
+<p>you can use hertz to compute the time resolution
+and frequency range of a signal that can be meaningfully analyzed by a
+<a href="https://en.wikipedia.org/wiki/Short-time_Fourier_transform#Explanation">short-time fourier transform</a>:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>hertz</span>;
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='kw'>let</span> <span class='ident'>sample_rate</span> <span class='op'>=</span> <span class='number'>44100</span>;
+    <span class='kw'>let</span> <span class='ident'>window_size</span> <span class='op'>=</span> <span class='number'>4096</span>;
+    <span class='kw'>let</span> <span class='ident'>step_size</span> <span class='op'>=</span> <span class='number'>512</span>;
+
+    <span class='comment'>// 11 hertz is the maximum frequency that can be meaningfully analyzed</span>
+    <span class='macro'>assert_eq</span><span class='macro'>!</span>(
+        <span class='number'>11.</span>,
+        <span class='ident'>hertz</span>::<span class='ident'>rayleigh</span>(<span class='ident'>sample_rate</span> <span class='kw'>as</span> <span class='ident'>f64</span>, <span class='ident'>window_size</span> <span class='kw'>as</span> <span class='ident'>f64</span>).<span class='ident'>round</span>());
+
+    <span class='comment'>// 22050 hertz is the maximum frequency that can be meaningfully analyzed</span>
+    <span class='macro'>assert_eq</span><span class='macro'>!</span>(
+        <span class='number'>22050.</span>,
+        <span class='ident'>hertz</span>::<span class='ident'>nyquist</span>(<span class='ident'>sample_rate</span> <span class='kw'>as</span> <span class='ident'>f64</span>).<span class='ident'>round</span>());
+
+    <span class='comment'>// 12 ms is the time resolution we get when analyzing a 44100 hertz</span>
+    <span class='comment'>// signal with a step size of 512</span>
+    <span class='macro'>assert_eq</span><span class='macro'>!</span>(
+        <span class='number'>12.</span>,
+        <span class='ident'>hertz</span>::<span class='ident'>s_to_ms</span>(<span class='ident'>hertz</span>::<span class='ident'>cycles_per_second_to_seconds_per_cycle</span>(
+            <span class='ident'>sample_rate</span> <span class='kw'>as</span> <span class='ident'>f64</span>,
+            <span class='ident'>step_size</span> <span class='kw'>as</span> <span class='ident'>f64</span>)).<span class='ident'>round</span>());
+}</pre>
+
+<p>you can use hertz to keep a constant framerate in a game or other
+computer graphics application:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='kw'>let</span> <span class='ident'>frames_per_second</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>60</span>;
+
+    <span class='kw'>loop</span> {
+        <span class='kw'>let</span> <span class='ident'>ns_at_frame_start</span> <span class='op'>=</span> <span class='ident'>hertz</span>::<span class='ident'>current_time_ns</span>();
+
+        <span class='comment'>// here&#39;s where logic and rendering would go.</span>
+        <span class='comment'>// this is never called more than frames_per_second</span>
+        <span class='comment'>// times per second.</span>
+
+        <span class='ident'>hertz</span>::<span class='ident'>sleep_for_constant_rate</span>(
+            <span class='ident'>frames_per_second</span>, <span class='ident'>ns_at_frame_start</span>);
+    }
+}</pre>
+</div><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.current_time_ns.html'
+                                  title='hertz::current_time_ns'>current_time_ns</a></td>
+                           <td class='docblock short'>
+                                <p>returns the current timestamp in nanoseconds</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.cycles_per_second_to_seconds_per_cycle.html'
+                                  title='hertz::cycles_per_second_to_seconds_per_cycle'>cycles_per_second_to_seconds_per_cycle</a></td>
+                           <td class='docblock short'>
+                                <p>window duration in seconds
+sample_rate in hertz</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.fps_to_ns_per_frame.html'
+                                  title='hertz::fps_to_ns_per_frame'>fps_to_ns_per_frame</a></td>
+                           <td class='docblock short'>
+                                <p>when given frames per second (or sample rate)
+returns the duration of a single frame</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.hertz_range.html'
+                                  title='hertz::hertz_range'>hertz_range</a></td>
+                           <td class='docblock short'>
+                                <p>frequency range that can be modeled when taking the short
+time fourier transform of a signal with <code>sample_rate</code> with
+a sliding window of <code>window_sizew</code>.
+equivalent to <code>rayleigh(sample_rate, window_size)..nyquist(sample_rate)</code>
+increase the window size to increase the lower frequency
+increase the sample rate to increase the upper frequency</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.ms_to_ns.html'
+                                  title='hertz::ms_to_ns'>ms_to_ns</a></td>
+                           <td class='docblock short'>
+                                <p>milliseconds to nanoseconds</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.ms_to_s.html'
+                                  title='hertz::ms_to_s'>ms_to_s</a></td>
+                           <td class='docblock short'>
+                                <p>milliseconds to seconds</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.ns_to_ms.html'
+                                  title='hertz::ns_to_ms'>ns_to_ms</a></td>
+                           <td class='docblock short'>
+                                <p>nanoseconds to milliseconds</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.ns_to_s.html'
+                                  title='hertz::ns_to_s'>ns_to_s</a></td>
+                           <td class='docblock short'>
+                                <p>nanoseconds to seconds</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.nyquist.html'
+                                  title='hertz::nyquist'>nyquist</a></td>
+                           <td class='docblock short'>
+                                <p>maximum frequency in hertz that can be meaningfully analyzed with a given sample rate
+<a href="https://en.wikipedia.org/wiki/Short-time_Fourier_transform#Explanation">https://en.wikipedia.org/wiki/Short-time_Fourier_transform#Explanation</a></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.rayleigh.html'
+                                  title='hertz::rayleigh'>rayleigh</a></td>
+                           <td class='docblock short'>
+                                <p>minimum frequency in hertz that can be meaningfully analyzed with a given sample rate and
+window size
+<a href="https://en.wikipedia.org/wiki/Short-time_Fourier_transform#Rayleigh_frequency">https://en.wikipedia.org/wiki/Short-time_Fourier_transform#Rayleigh_frequency</a></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.s_to_ms.html'
+                                  title='hertz::s_to_ms'>s_to_ms</a></td>
+                           <td class='docblock short'>
+                                <p>seconds to milliseconds</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.s_to_ns.html'
+                                  title='hertz::s_to_ns'>s_to_ns</a></td>
+                           <td class='docblock short'>
+                                <p>seconds to nanoseconds</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.sleep_for_constant_rate.html'
+                                  title='hertz::sleep_for_constant_rate'>sleep_for_constant_rate</a></td>
+                           <td class='docblock short'>
+                                <p>useful for keeping a constant framerate</p>
+                           </td>
+                       </tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "hertz";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script defer src="../search-index.js"></script>
+</body>
+</html>
