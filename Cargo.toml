@@ -9,3 +9,11 @@ name = "hertz"
 readme = "README.md"
 repository = "https://github.com/snd/hertz.git"
 version = "0.3.0"
+edition = "2018"
+
+[features]
+default = ["std"]
+std = []
+
+[dependencies]
+libm = "0.2.1"
