@@ -62,8 +62,9 @@ fn main() {
 ```
 */
 
-use std::time;
-use std::ops::{Mul, Div, Range};
+#![cfg_attr(not(feature = "std"), no_std)]
+
+use core::ops::{Mul, Div, Range};
 
 /// nanoseconds to seconds
 #[inline]
@@ -121,7 +122,7 @@ pub fn ms_to_ns(ns: f64) -> f64 {
 /// returns the duration of a single frame
 #[inline]
 pub fn fps_to_ns_per_frame(fps: usize) -> u64 {
-    (s_to_ns(1.0) / (fps as f64)).round() as u64
+    libm::round(s_to_ns(1.0) / (fps as f64)) as u64
 }
 
 // /// returns the nanoseconds of sleep which are needed to keep a constant
@@ -129,9 +130,10 @@ pub fn fps_to_ns_per_frame(fps: usize) -> u64 {
 // pub fn ns_sleep_needed_for_constant_rate(fps: usize, ns_at_last_frame_start: u64) -> u64 {
 
 /// useful for keeping a constant framerate
-pub fn sleep_for_constant_rate(fps: usize, instant_at_last_frame_start: time::Instant) {
+#[cfg(feature = "std")]
+pub fn sleep_for_constant_rate(fps: usize, instant_at_last_frame_start: std::time::Instant) {
     let ns_per_frame = fps_to_ns_per_frame(fps);
-    let frame_duration = time::Duration::new(ns_per_frame * 1000000000, (ns_per_frame % 1000000000) as u32);
+    let frame_duration = std::time::Duration::new(ns_per_frame * 1000000000, (ns_per_frame % 1000000000) as u32);
     let elapsed = instant_at_last_frame_start.elapsed();
     if elapsed < frame_duration {
         std::thread::sleep(frame_duration - elapsed);
